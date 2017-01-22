@@ -18,7 +18,6 @@ class StockTable extends Component {
         this.setState({
             graphSymbol : symbol
         });
-        console.log("Clicked button");
     }
 
     render() {

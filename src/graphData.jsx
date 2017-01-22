@@ -17,17 +17,14 @@ class GraphData extends Component {
     }
 
     componentDidMount() {
-        console.log("Mounted");
         this.getInputParams();
     }
 
     componentWillReceiveProps() {
-        console.log("Will update");
         this.getInputParams()
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        console.log("Should update?");
         if (this.props.symbol !== nextProps.symbol) {
             return true;
         }
@@ -59,14 +56,9 @@ class GraphData extends Component {
         };
         var parameters = "parameters={\"Normalized\":" + params.Normalized + ",\"NumberOfDays\":" + params.NumberOfDays + ",\"DataPeriod\":\"" + params.DataPeriod + "\",\"Elements\":[{\"Symbol\":\"" + params.Elements[0].Symbol + "\",\"Type\":\"" + params.Elements[0].Type + "\",\"Params\":[\"" + params.Elements[0].Params + "\"]}]}";
         this.getGraphData(parameters);
-        // return parameters;
     }
 
     getGraphData(parameters) {
-        // var nbrDays = days ? days : this.state.numberOfDays;
-        // var interval = period ? period : this.state.dataPeriod;
-        // var params = this.getInputParams(nbrDays, interval);
-        // console.log(params);
         let url = 'http://dev.markitondemand.com/Api/v2/InteractiveChart/jsonp?' + parameters;
         fetchJSONP(url).then((response) => {
             return response.json();
