@@ -7,13 +7,13 @@ class Header extends Component {
           <Navbar inverse collapseOnSelect>
             <Navbar.Header>
               <Navbar.Brand>
-                <a href="#">React Stocks</a>
+                React Stocks
               </Navbar.Brand>
               <Navbar.Toggle />
             </Navbar.Header>
             <Navbar.Collapse>
               <Nav pullRight>
-              <NavItem eventKey={1} href="#">View Github</NavItem>
+              <NavItem eventKey={1} href="https://github.com/williamliu52/react-stocks">View Github</NavItem>
               </Nav>
             </Navbar.Collapse>
           </Navbar>
