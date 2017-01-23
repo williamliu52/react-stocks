@@ -4,6 +4,19 @@ body {
   font-family: sans-serif;
 }
 
+#header {
+    width: 60%;
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.navbar-brand:hover,
+.navbar-brand:focus {
+    color: #9d9d9d !important;
+}
+
+
 /* adjusting width of search box */
 form {
     width: 60%;
@@ -20,7 +33,7 @@ form {
     padding: 10px;
 }
 
-/*.table-responsive {
-    max-width: 40%;
-    margin-left: 5%;
-}*/
+.navbar-link,
+.navbar-link:hover {
+    text-decoration: none;
+}

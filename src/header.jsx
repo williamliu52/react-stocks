@@ -12,9 +12,9 @@ class Header extends Component {
               <Navbar.Toggle />
             </Navbar.Header>
             <Navbar.Collapse>
-              <Nav pullRight>
-              <NavItem eventKey={1} href="https://github.com/williamliu52/react-stocks">View Github</NavItem>
-              </Nav>
+              <Navbar.Text>
+                  <Navbar.Link href="https://github.com/williamliu52/react-stocks" target="_blank">View Github</Navbar.Link>
+              </Navbar.Text>
             </Navbar.Collapse>
           </Navbar>
         );
