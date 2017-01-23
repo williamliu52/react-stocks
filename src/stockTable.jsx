@@ -36,7 +36,7 @@ class StockTable extends Component {
         });
         return(
             <div className="stockTable">
-                <div class="companyTable">
+                <div className="companyTable">
                     <Table bordered hover responsive>
                         <thead>
                             <tr>
@@ -54,7 +54,7 @@ class StockTable extends Component {
                         </tbody>
                     </Table>
                 </div>
-                <div class="graphArea">
+                <div className="graphArea">
                     <GraphData
                         symbol={this.state.graphSymbol}/>
                 </div>

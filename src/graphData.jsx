@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import fetchJSONP from 'fetch-jsonp';
+import reqwest from 'reqwest';
 import Graph from './graph'
 
 class GraphData extends Component {
@@ -60,25 +60,32 @@ class GraphData extends Component {
 
     getGraphData(parameters) {
         let url = 'http://dev.markitondemand.com/Api/v2/InteractiveChart/jsonp?' + parameters;
-        fetchJSONP(url).then((response) => {
-            return response.json();
-        }).then((results) => {
-            var dataArray = [];
-            for (var i = 0; i < results.Positions.length; i++) {
-                dataArray.push(
-                    {
-                        'name' : results.Positions[i],
-                        'value' : results.Elements[0].DataSeries.close.values[i]
-                    }
-                )
+        var self = this;
+        reqwest({
+            url: url,
+            type: 'jsonp',
+            success: function(results) {
+                var dataArray = [];
+                for (var i = 0; i < results.Positions.length; i++) {
+                    dataArray.push(
+                        {
+                            'name' : results.Positions[i],
+                            'value' : results.Elements[0].DataSeries.close.values[i]
+                        }
+                    )
+                }
+                self.setGraphData(dataArray);
+            },
+            error: function(err) {
+                console.log('Parsing failed, err');
             }
-            this.setState({
-                graphData : dataArray
-            });
-        }).catch((err) => {
-            // TODO: replace with proper alert
-            console.log(err);
-        })
+        });
+    }
+
+    setGraphData(dataArray) {
+        this.setState({
+            graphData : dataArray
+        });
     }
 
     render() {

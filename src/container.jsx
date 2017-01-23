@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import fetchJSONP from 'fetch-jsonp';
+import reqwest from 'reqwest';
 import { ControlLabel, FormGroup, HelpBlock } from 'react-bootstrap';
 import Search from './search';
 import StockTable from './stockTable';
@@ -22,19 +22,30 @@ class Container extends Component {
     lookupStock(searchValue) {
         if (searchValue) {
             let url = 'http://dev.markitondemand.com/Api/v2/Lookup/jsonp?input=' + searchValue;
-            fetchJSONP(url).then((response) => {
-                return response.json();
-            }).then((results) => {
-                if (results !== undefined) {
-                    let items = results.map((res, i) => {
-                        return res.Name + " (" + res.Exchange + ")" + " (" + res.Symbol + ")"
-                    });
-                    this.setState({ validation: null })
-                    this.setState({ stockLookup: items });
+            var self = this;
+            reqwest({
+                url: url,
+                type: 'jsonp',
+                success: function(results) {
+                    if (results !== undefined) {
+                        let items = results.map((res, i) => {
+                            return res.Name + " (" + res.Exchange + ")" + " (" + res.Symbol + ")"
+                        });
+                        self.setLookupStock(items);
+                    }
+                },
+                error: function(err) {
+                    console.log('Parsing failed, err');
+                    self.setState({ validation : 'error' })
                 }
-            }).catch((err) => {
-                this.setState({ validation: 'error' })
             });
+        }
+    }
+
+    setLookupStock(results) {
+        if (results.length > 0) {
+            this.setState({ validation: null });
+            this.setState({ stockLookup: results });
         }
     }
 
@@ -50,25 +61,42 @@ class Container extends Component {
 
     quoteStock(stockSymbol) {
         let url = 'http://dev.markitondemand.com/Api/v2/Quote/jsonp?symbol=' + stockSymbol;
-        var self = this;
         if (this.state.quotedStocks.indexOf(stockSymbol[0]) === -1) {
             this.setState({
                 quotedStocks : this.state.quotedStocks.concat([stockSymbol[0]])
             });
-            fetchJSONP(url).then((response) => {
-                return response.json();
-            }).then((results) => {
-                if (results !== undefined) {
-                    self.setState({ validation: null })
-                    self.setState({
-                        stockQuotes: self.state.stockQuotes.concat([results])
-                    });
+            var self = this;
+            reqwest({
+                url: url,
+                type: 'jsonp',
+                success: function(results) {
+                    if (results !== undefined) {
+                        self.setQuoteStock(results);
+                    }
+                },
+                error: function(err) {
+                    console.log('Parsing failed, err');
+                    self.setState({ validation : 'error' })
                 }
-            }).catch((err) => {
-                this.setState({ validation: 'error' })
             });
-        } else {
-            this.setState({ validation: 'error' })
+        }
+    }
+
+    setQuoteStock(results) {
+        if (results !== undefined) {
+            this.setState({ validation: null })
+            this.setState({
+                stockQuotes: this.state.stockQuotes.concat([results])
+            });
+        }
+    }
+
+    setQuoteStock(results) {
+        if (results !== undefined) {
+            this.setState({ validation: null })
+            this.setState({
+                stockQuotes: this.state.stockQuotes.concat([results])
+            });
         }
     }
 
@@ -80,7 +108,7 @@ class Container extends Component {
                     <form>
                         <FormGroup controlId="searchBox" validationState={this.state.validation}>
                             <ControlLabel>Company Name or Symbol</ControlLabel>
-                            <Search ref="typeahead" lookup={this.lookupStock} onChange={this.getStockSelection} options={this.state.stockLookup}/>
+                            <Search lookup={this.lookupStock} onChange={this.getStockSelection} options={this.state.stockLookup}/>
                             { this.state.validation && <HelpBlock>Error: stock cannot be found or has already been selected. Please try again</HelpBlock> }
                         </FormGroup>
                     </form>

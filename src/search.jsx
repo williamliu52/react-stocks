@@ -9,6 +9,7 @@ class Search extends Component {
         }
 
         this.onInputChange = this.onInputChange.bind(this);
+        this.onChange = this.onChange.bind(this);
     }
 
     onInputChange(text) {
@@ -16,11 +17,18 @@ class Search extends Component {
         this.props.lookup(text);
     }
 
+    onChange(stock) {
+        if (stock.length > 0) {
+            this.refs.search.getInstance().clear()
+            this.props.onChange(stock);
+        }
+    }
+
     render() {
         return(
-            <Typeahead
+            <Typeahead ref="search"
                 onInputChange={this.onInputChange}
-                onChange={this.props.onChange}
+                onChange={this.onChange}
                 options={this.props.options}
                 placeholder={"Search"}
                 emptyLabel={"No results found"}
